@@ -9,4 +9,5 @@ if (isLoggedIn()) {
     header('Location: /pages/auth/login.php');
 }
 exit;
+//saya menambahkan kode disini
 ?>
