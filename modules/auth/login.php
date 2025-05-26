@@ -48,9 +48,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <button type="submit" class="btn btn-primary">Login</button>
                     </form>
-                    <div class="mt-3">
+                   <div class="mt-3 d-flex justify-content-between align-items-center">
+                    <div>
                         Belum punya akun? <a href="register.php">Register disini</a>
                     </div>
+                    <div>
+                        <a href="forgot_password.php" class="text-danger text-decoration-none hover:text-danger-dark">Lupa password?</a>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>
