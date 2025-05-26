@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2025 at 08:36 AM
+-- Generation Time: May 25, 2025 at 03:49 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -24,47 +24,51 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `activities`
+-- Table structure for table `kategori`
 --
 
-CREATE TABLE `activities` (
+CREATE TABLE `kategori` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `description` text DEFAULT NULL,
-  `date` date NOT NULL,
+  `nama` varchar(50) NOT NULL,
+  `jenis` enum('pemasukan','pengeluaran') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categories`
+-- Table structure for table `kegiatan`
 --
 
-CREATE TABLE `categories` (
+CREATE TABLE `kegiatan` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `type` enum('income','expense') NOT NULL,
+  `tanggal` date NOT NULL,
+  `judul` varchar(100) NOT NULL,
+  `waktu_mulai` time NOT NULL,
+  `waktu_selesai` time NOT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `status` enum('rencana','berjalan','selesai') NOT NULL DEFAULT 'rencana',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `transactions`
+-- Table structure for table `transaksi`
 --
 
-CREATE TABLE `transactions` (
+CREATE TABLE `transaksi` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `amount` decimal(12,2) NOT NULL,
-  `type` enum('income','expense') NOT NULL,
-  `category_id` int(11) NOT NULL,
-  `description` text DEFAULT NULL,
-  `date` date NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `tanggal` date NOT NULL,
+  `jenis` enum('pemasukan','pengeluaran') NOT NULL,
+  `kategori_id` int(11) NOT NULL,
+  `jumlah` decimal(12,2) NOT NULL,
+  `keterangan` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -76,8 +80,8 @@ CREATE TABLE `transactions` (
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
   `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -86,26 +90,26 @@ CREATE TABLE `users` (
 --
 
 --
--- Indexes for table `activities`
+-- Indexes for table `kategori`
 --
-ALTER TABLE `activities`
+ALTER TABLE `kategori`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `categories`
+-- Indexes for table `kegiatan`
 --
-ALTER TABLE `categories`
+ALTER TABLE `kegiatan`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user_id` (`user_id`,`name`,`type`);
+  ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `transactions`
+-- Indexes for table `transaksi`
 --
-ALTER TABLE `transactions`
+ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `category_id` (`category_id`);
+  ADD KEY `kategori_id` (`kategori_id`);
 
 --
 -- Indexes for table `users`
@@ -120,21 +124,21 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `activities`
+-- AUTO_INCREMENT for table `kategori`
 --
-ALTER TABLE `activities`
+ALTER TABLE `kategori`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `categories`
+-- AUTO_INCREMENT for table `kegiatan`
 --
-ALTER TABLE `categories`
+ALTER TABLE `kegiatan`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `transactions`
+-- AUTO_INCREMENT for table `transaksi`
 --
-ALTER TABLE `transactions`
+ALTER TABLE `transaksi`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -148,23 +152,23 @@ ALTER TABLE `users`
 --
 
 --
--- Constraints for table `activities`
+-- Constraints for table `kategori`
 --
-ALTER TABLE `activities`
-  ADD CONSTRAINT `activities_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+ALTER TABLE `kategori`
+  ADD CONSTRAINT `kategori_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `categories`
+-- Constraints for table `kegiatan`
 --
-ALTER TABLE `categories`
-  ADD CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+ALTER TABLE `kegiatan`
+  ADD CONSTRAINT `kegiatan_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `transactions`
+-- Constraints for table `transaksi`
 --
-ALTER TABLE `transactions`
-  ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE;
+ALTER TABLE `transaksi`
+  ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`kategori_id`) REFERENCES `kategori` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

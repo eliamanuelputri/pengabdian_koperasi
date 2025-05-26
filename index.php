@@ -1,13 +1,20 @@
 <?php
-// Redirect ke dashboard jika sudah login, atau ke halaman login jika belum
-include 'config/database.php';
-include 'functions/auth_functions.php';
+// File: /keuangan-app/index.php
 
-if (isLoggedIn()) {
-    header('Location: /pages/dashboard.php');
+// Mulai session
+session_start();
+
+// Definisikan BASE_URL
+define('BASE_URL', 'http://' . $_SERVER['HTTP_HOST'] . str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']));
+
+// Redirect berdasarkan status login
+if (isset($_SESSION['user_id'])) {
+    // Jika sudah login, redirect ke dashboard
+    header('Location: ' . BASE_URL . 'modules/dashboard/');
 } else {
-    header('Location: /pages/auth/login.php');
+    // Jika belum login, redirect ke halaman login
+    header('Location: ' . BASE_URL . 'modules/auth/login.php');
 }
-exit;
-//saya menambahkan kode disini
+
+exit();
 ?>

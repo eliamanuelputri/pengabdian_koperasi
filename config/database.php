@@ -12,5 +12,5 @@ try {
     die("Koneksi database gagal: " . $e->getMessage());
 }
 
-define('BASE_URL', 'http://localhost/keuangan_app/');
+define('BASE_URL', 'http://localhost/keuangan-app/');
 ?>

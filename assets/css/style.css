@@ -1,59 +1,80 @@
-/* Custom CSS untuk aplikasi keuangan */
+/* General Styles */
 body {
-    background-color: #f8f9fa;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
 }
 
+.container {
+    padding-bottom: 2rem;
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+/* Cards */
 .card {
+    border: none;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,.1);
     margin-bottom: 20px;
 }
 
-.list-group-item {
-    border-radius: 8px !important;
-    margin-bottom: 8px;
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #eee;
+    font-weight: 600;
 }
 
-.navbar {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* Tables */
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+/* Badges */
+.badge {
+    font-weight: 500;
+    padding: 5px 10px;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+    
     .card-body {
         padding: 1rem;
     }
     
-    .display-4 {
-        font-size: 2rem;
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .btn {
+        padding: .375rem .5rem;
+        font-size: .875rem;
     }
 }
 
-/* Animasi untuk hover */
-.btn, .list-group-item, .card {
-    transition: all 0.3s ease;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
+@media (max-width: 576px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .card {
+        border-radius: 0;
+    }
+    
+    .form-control, .form-select, .btn {
+        font-size: .875rem;
+    }
 }
