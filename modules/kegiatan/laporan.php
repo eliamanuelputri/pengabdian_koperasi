@@ -118,8 +118,11 @@ $stats = $stmt_stats->fetchAll();
                                     <?php echo date('H:i', strtotime($act['waktu_selesai'])); ?>
                                 </td>
                                 <td>
-                                    <span class="badge bg-<?php echo $act['status'] == 'selesai' ? 'success' : ($act['status'] == 'berjalan' ? 'warning' : 'info'); ?>">
-                                        <?php echo ucfirst($act['status']); ?>
+                                    <span
+                                        class="badge bg-<?php echo $act['status'] == 'selesai' ? 'success' : ($act['status'] == 'berjalan' ? 'warning' : 'info'); ?> status-badge"
+                                        data-id="<?= $act['id']; ?>" data-status="<?= $act['status']; ?>"
+                                        style="cursor: pointer;">
+                                        <?= ucfirst($act['status']); ?>
                                     </span>
                                 </td>
                             </tr>
@@ -131,5 +134,42 @@ $stats = $stmt_stats->fetchAll();
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.status-badge').forEach(function (badge) {
+        badge.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const currentStatus = this.dataset.status;
+            const badgeEl = this;
+
+            fetch('update-status.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `id=${id}&current_status=${currentStatus}`
+                })
+                .then(res => res.text())
+                .then(newStatus => {
+                    badgeEl.dataset.status = newStatus;
+                    badgeEl.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+
+                    // Ubah warna badge sesuai status baru
+                    badgeEl.className = 'badge status-badge';
+                    if (newStatus === 'rencana') {
+                        badgeEl.classList.add('bg-info');
+                    } else if (newStatus === 'berjalan') {
+                        badgeEl.classList.add('bg-warning');
+                    } else if (newStatus === 'selesai') {
+                        badgeEl.classList.add('bg-success');
+                    }
+                })
+                .catch(error => {
+                    alert('Gagal mengubah status');
+                    console.error(error);
+                });
+        });
+    });
+</script>
 
 <?php require_once '../../includes/footer.php'; ?>

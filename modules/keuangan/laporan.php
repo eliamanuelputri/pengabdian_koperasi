@@ -202,13 +202,19 @@ foreach ($expense_data as $row) {
         <div class="card-header">
             <h5>Analisis Pengeluaran</h5>
         </div>
-        <div class="card-body">
-            <p>Kategori dengan pengeluaran terbesar:</p>
-            <ul>
-                <?php foreach($top_expenses as $expense): ?>
-                    <li><?php echo htmlspecialchars($expense['kategori']); ?>: Rp <?php echo number_format($expense['total'], 0, ',', '.'); ?></li>
-                <?php endforeach; ?>
-            </ul>
+        <div class="card-body row">
+            <div class="col-md-6" style="">
+                <p>Kategori dengan pengeluaran terbesar:</p>
+                <ul>
+                    <?php foreach($top_expenses as $expense): ?>
+                    <li><?php echo htmlspecialchars(ucfirst(strtolower($expense['kategori']))); ?>: Rp
+                        <?php echo number_format($expense['total'], 0, ',', '.'); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <div class="col-md-6" >
+                <canvas id="donutChart" style="width: 350px; height: 350px; margin: 0 auto;""></canvas>
+            </div>
         </div>
     </div>
     <?php endif; ?>
@@ -345,6 +351,43 @@ const incomeExpenseChart = new Chart(ctx, {
         }
     }
 });
+</script>
+<script>
+    const donutCtx = document.getElementById('donutChart').getContext('2d');
+
+    const donutData = {
+        labels: <?php echo json_encode(array_column($top_expenses, 'kategori')); ?> ,
+        datasets : [{
+            label: 'Pengeluaran per Kategori',
+            data: <?php echo json_encode(array_map('floatval', array_column($top_expenses, 'total'))); ?>
+            ,
+            backgroundColor : ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'],
+            hoverOffset: 4
+        }]
+    };
+
+    const donutChart = new Chart(donutCtx, {
+        type: 'doughnut',
+        data: donutData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const value = context.parsed;
+                            const percent = ((value / total) * 100).toFixed(1);
+                            return `${context.label}: Rp ${value.toLocaleString('id-ID')} (${percent}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
 </script>
 
 <?php require_once '../../includes/footer.php'; ?>

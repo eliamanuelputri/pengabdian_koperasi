@@ -15,7 +15,7 @@ $categories = $stmt->fetchAll();
 
 // Tambah kategori
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_category'])) {
-    $nama = $_POST['nama'];
+    $nama = ucwords(strtolower($_POST['nama']));
     $jenis = $_POST['jenis'];
     
     try {
