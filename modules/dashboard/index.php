@@ -28,6 +28,17 @@ $username = $_SESSION['username'] ?? 'Pengguna';
             </div>
         </div>
 
+        <!-- Utang & Piutang -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Utang & Piutang</h5>
+                    <p class="card-text">Catat dan kelola utang atau piutang bisnis Anda.</p>
+                    <a href="../utang_piutang/" class="btn btn-primary">Kelola Sekarang</a>
+                </div>
+            </div>
+        </div>
+
         <!-- Kegiatan Harian -->
         <div class="col-md-4 mb-4">
             <div class="card h-100">
